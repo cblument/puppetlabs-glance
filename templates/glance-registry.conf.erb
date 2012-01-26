@@ -32,7 +32,6 @@ sql_connection = <%= sql_connection %>
 # before MySQL can drop the connection.
 sql_idle_timeout = <%= sql_idle_timeout %>
 
-<<<<<<< .merge_file_Kvk1Yr
 # Limit the api to return `param_limit_max` items in a call to a container. If
 # a larger `limit` query param is provided, it will be reduced to this value.
 api_limit_max = 1000
@@ -62,34 +61,3 @@ use_syslog = False
 [paste_deploy]
 flavor = <%= paste_deploy_flavor %>
 <% end -%>
-=======
-[pipeline:glance-registry]
-pipeline = context registryapp
-# NOTE: use the following pipeline for keystone
-# pipeline = authtoken auth-context registryapp
-
-[app:registryapp]
-paste.app_factory = glance.common.wsgi:app_factory
-glance.app_factory = glance.registry.api.v1:API
-
-[filter:context]
-context_class = glance.registry.context.RequestContext
-paste.filter_factory = glance.common.wsgi:filter_factory
-glance.filter_factory = glance.common.context:ContextMiddleware
-
-[filter:authtoken]
-paste.filter_factory = keystone.middleware.auth_token:filter_factory
-service_protocol = http
-service_host = 127.0.0.1
-service_port = 5000
-auth_host = 127.0.0.1
-auth_port = 35357
-auth_protocol = http
-auth_uri = http://127.0.0.1:5000/
-admin_token = 999888777666
-
-[filter:auth-context]
-context_class = glance.registry.context.RequestContext
-paste.filter_factory = glance.common.wsgi:filter_factory
-glance.filter_factory = keystone.middleware.glance_auth_token:KeystoneContextMiddleware
->>>>>>> .merge_file_6teTyo
